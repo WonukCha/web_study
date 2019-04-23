@@ -1,0 +1,53 @@
+<html>
+    <head></head>
+        <Body>
+            <script>
+                function hederTag(_title,_sub)
+                {
+                    var hederTag =`
+                    <header>
+                    <h1><a href="index.html">${_title}</a></h1>
+                    ${_sub}
+                    </header>`;
+
+                    return hederTag;
+
+                } 
+                
+                var title = `WEB`;
+                var sub = `world wide web`;
+                
+                
+                var navTag = 
+                `
+                <nav>
+                <ol>
+                    <li><a href="1.html">HTML</a></li>
+                    <li><a href="2.html">CSS</a></li>
+                    <li><a href="3.html">Java Script</a></li>
+                </ol>            
+            </nav>
+            `;
+
+            function article(title,sub) 
+            {
+                return `
+                <article>
+                    <h2>${title}</h2>
+                    ${sub}    
+                </article>
+                `;
+            } 
+
+                document.write(
+                    hederTag('HTML','World Wide Web')+
+                    navTag+
+                    article('Welcome','Hello, Web')
+                    );
+            </script>
+
+            
+            
+            
+        </Body>
+</html>
