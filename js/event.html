@@ -1,14 +1,15 @@
 <html>
-
     <body>
         <script>
-            function handler()
+            function handler(e)
             {
-                debugger;
                 alert("asd");
+                console.log(e.target.tagName,e,e.target,e.tpye);
             }
 
         </script>
-        <input type="button" value="h1" onclick="handler();">
+        <input type="text" onchange="handler(event);">
+        
+        <input type="button" value="h1" onclick="handler(event);">
     </body>
 </html>
