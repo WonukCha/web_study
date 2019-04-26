@@ -1,0 +1,61 @@
+<html>
+    <body>
+        <h2>
+            Object Factory     
+        </h2>
+        <script>
+            var  p1 = {
+                name:'egoing',
+                first:10,
+                second:20,
+                sum:function(){
+                    return this.first + this.second;
+                },
+                p1:function(){
+                    first = 0;
+                    second = 0;
+                },
+                p1:function(_first,_second)
+                {
+                    first = _first;
+                    second= _second;
+                }
+            }
+
+            function Person(_name,_first_second){
+                this.name=_name;
+                this.first=_first;
+                this.second=_second;
+                this.sum = function(){
+                    return this.first+this.second;
+                }        
+            }
+            person.prototype.sum = function(){
+                return this._first+this._second;
+            }
+
+            class Person{
+                constructor()
+                {
+                    this.name=_name;
+                    this.first=_first;
+                    this.second=_second;
+                    this.sum = function(){
+                    
+                        return this.first+this.second;
+                }
+                sum()
+                {
+                    return this._first+this._second;
+                }
+
+                }
+            }
+
+
+            var p1 = new Person('이고잉',10,20);
+            console.log(p1.sum());
+
+        </script>
+    </body>
+</html>
