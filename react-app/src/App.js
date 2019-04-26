@@ -1,52 +1,33 @@
 import React,{Component} from 'react';
+import logo from './logo.svg';
+import TOC from "./components/TOC";
+import ContentCreate from "./components/ContentCreate";
+import './App.css';
  
 class Subject extends Component{
-  render(_event){
+  shouldComponentUpdate(prevProps, prevState){
+    console.log(prevProps);
+    return false;
+  }
+  render(){
+    console.log('Subject render');
     return (
       <header>
-        <h1><a href="/" onClick={
-          function(_event)
-          {
+        <h1><a onClick={
+          function(_event){
             _event.preventDefault();
             this.props.onChangePage();
           }.bind(this)
-        }>{this.props.title}</a></h1>
+        } href="/">{this.props.title}</a></h1>
         {this.props.sub}
       </header>
     )
   }
 }
  
-class TOC extends Component{
+class ContentRead extends Component{
   render(){
-    var tags = [];
-    var con = this.props.data;
-    var i = 0;
-    while(i < con.length){
-      tags.push(<li key={con[i].id}>
-                  <a href="" 
-                   onClick ={
-                     function(event){
-                      event.preventDefault();
-                      this.props.onChangePage();
-                   }.bind(this)}>
-                    {con[i].title}
-                  </a>
-                </li>);
-      i = i + 1;
-    }
-    return (
-      <nav>
-        <ol>
-          {tags}
-        </ol>
-      </nav>
-    );
-  }
-}
- 
-class Content extends Component{
-  render(){
+    console.log('Content render');
     return (
       <article>
         <h2>{this.props.title}</h2>
@@ -57,49 +38,86 @@ class Content extends Component{
 }
  
 class App extends Component{
+  max_id = 3;
   state = {
     contents:[
       {id:1, title:'HTML', desc:'HTML is ...'},
-      {id:2, title:'CSS', desc:'CSS is ...'}
+      {id:2, title:'CSS', desc:'CSS is ...'},
+      {id:3, title:'JavaScript', desc:'JavaScript is ...'}
     ],
-    mode:'read'
+    mode:'read',
+    selected_id:2
   }
   render(){
+    console.log('App render');
     var _aTitle, _aDesc = '';
+    var _content = null;
     if(this.state.mode === 'welcome'){
       _aTitle = 'Welcome';
       _aDesc = 'Hello, React';
+      _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
     } else if(this.state.mode === 'read'){
-      _aTitle = 'HTML';
-      _aDesc = 'HTML is ...';
+      var i = 0;
+      var con = this.state.contents;
+      while( i < con.length){
+        if(con[i].id === this.state.selected_id){
+          _aTitle = con[i].title;
+          _aDesc = con[i].desc;
+          break;
+        }
+        i = i + 1;
+      }
+      _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
+    } else if(this.state.mode === 'create'){
+      _content = <ContentCreate onSubmitCreate={
+        function(_title, _desc){
+          // todo : this.state.contents 값에 
+          // {id:마지막 id 값 + 1, title:_title, desc:_desc}
+          // 추가한다. 
+          console.log(_title, _desc);
+          this.max_id = this.max_id + 1;
+          // this.state.contents.push({
+          //   id:this.max_id,
+          //   title:_title,
+          //   desc:_desc
+          // })
+          var newContents = Array.from(this.state.contents);
+          newContents.push({
+            id:this.max_id,
+            title:_title,
+            desc:_desc
+          });
+          this.setState({contents:newContents});
+        }.bind(this)
+      }></ContentCreate>
     }
     return (
       <div className="App">
         <Subject title="WEB" sub="World!!" onChangePage={function(){
-          this.setState({mode:'welcome'});
-        }.bind(this)
-        }></Subject>
-        {/* <header>
-          <h1><a onClick={
-            function(_event){
-              console.log(this);
-              // this.state.mode = 'welcome';
-              this.setState({mode:'welcome'});
-              //setState가 아닌 값에 직접 접근할경우 값만 바꾸고 render가 안되고 값만 바뀌기 떄문에
-              //setState로 값을 변환하면 render가 실행되어 페이지가 바뀐다.
-              _event.preventDefault();
-            }.bind(this)
-            //bind가 없으면 this가 nill point가 된다.
-          } href="/">WEB</a></h1>
-          World!!
-        </header> */}
-        <TOC onChangePage = {
-          function(){
-            this.setState({mode:'read'});
+          this.setState({mode:'welcome'});  
+        }.bind(this)}></Subject>
+        <TOC onChangePage={
+          function(id){
+            this.setState({
+              mode:'read',
+              selected_id:id
+            });
             // todo : 선택한 글 본문 표현
           }.bind(this)
         } data={this.state.contents}></TOC>
-        <Content title={_aTitle} desc={_aDesc}></Content>
+        <ul>
+          <li><a
+            onClick={
+              function(event){
+                event.preventDefault();
+                this.setState({mode:'create'});
+              }.bind(this)
+            }
+            href="/create">create</a></li>
+          <li><a href="/update">update</a></li>
+          <li><input type="button" value="delete"></input></li>
+          </ul>
+        {_content}
       </div>
     );  
   }
