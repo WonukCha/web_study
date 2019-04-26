@@ -23,7 +23,16 @@ class TOC extends Component{
     var con = this.props.data;
     var i = 0;
     while(i < con.length){
-      tags.push(<li key={con[i].id}><a href="">{con[i].title}</a></li>);
+      tags.push(<li key={con[i].id}>
+                  <a href="" 
+                   onClick ={
+                     function(event){
+                      event.preventDefault();
+                      this.props.onChangePage();
+                   }.bind(this)}>
+                    {con[i].title}
+                  </a>
+                </li>);
       i = i + 1;
     }
     return (
@@ -51,7 +60,7 @@ class App extends Component{
   state = {
     contents:[
       {id:1, title:'HTML', desc:'HTML is ...'},
-      {id:2, title:'  ', desc:'CSS is ...'}
+      {id:2, title:'CSS', desc:'CSS is ...'}
     ],
     mode:'read'
   }
@@ -84,7 +93,12 @@ class App extends Component{
           } href="/">WEB</a></h1>
           World!!
         </header> */}
-        <TOC data={this.state.contents}></TOC>
+        <TOC onChangePage = {
+          function(){
+            this.setState({mode:'read'});
+            // todo : 선택한 글 본문 표현
+          }.bind(this)
+        } data={this.state.contents}></TOC>
         <Content title={_aTitle} desc={_aDesc}></Content>
       </div>
     );  
